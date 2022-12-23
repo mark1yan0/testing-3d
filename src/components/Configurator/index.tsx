@@ -1,6 +1,8 @@
 import React from 'react';
-import { useCustomization } from '../context/Customization';
-import { IColorItem } from '../lib/interfaces';
+import { useCustomization } from '../../context/index.';
+import ColorPicker from './ColorPicker';
+import PickerSection from './PickerSection';
+import TextPicker from './TextPicker';
 
 const Configurator = () => {
   const {
@@ -70,79 +72,3 @@ const Configurator = () => {
 };
 
 export default Configurator;
-
-interface ISectionProps {
-  children: React.ReactNode;
-  title: string;
-}
-
-const PickerSection = ({ title, children }: ISectionProps) => {
-  return (
-    <div>
-      <h4 className='title mb-2'>{title}</h4>
-      <div className='values-container'>{children}</div>
-    </div>
-  );
-};
-
-type IClick = (event: React.MouseEvent<HTMLDivElement>) => void;
-
-interface ITextPicker {
-  onClick: IClick;
-  selected: boolean;
-  label: string;
-}
-
-interface IPickerProps extends IGenericProps {
-  onClick: IClick;
-}
-
-const ColorPicker = ({ onClick, item, matcher }: IPickerProps) => {
-  return (
-    <div className='picker' onClick={onClick}>
-      <Dot item={item} matcher={matcher} />
-      <Label item={item} matcher={matcher} />
-    </div>
-  );
-};
-
-const TextPicker = ({ onClick, selected, label }: ITextPicker) => {
-  return (
-    <div
-      className={`picker ${selected ? 'border-b-2 border-black' : ''}`}
-      onClick={onClick}
-    >
-      <p className={`label ${selected ? 'text-black' : ''}`}>{label}</p>
-    </div>
-  );
-};
-
-interface IGenericProps {
-  item: IColorItem;
-  matcher: IColorItem;
-}
-
-const Dot = ({ item, matcher }: IGenericProps) => {
-  return (
-    <div
-      className={`dot ${
-        item.color === matcher?.color ? 'border-2 border-black' : ''
-      }`}
-      style={{ backgroundColor: item.color }}
-    />
-  );
-};
-
-const Label = ({ item, matcher }: IGenericProps) => {
-  return (
-    <p
-      className={`label ${
-        item.color === matcher?.color
-          ? 'text-black border-b-2 border-black'
-          : ''
-      }`}
-    >
-      {item.name}
-    </p>
-  );
-};

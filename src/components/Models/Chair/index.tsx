@@ -1,43 +1,43 @@
-import { useGLTF, useTexture } from '@react-three/drei'
-import React from 'react'
-import * as THREE from 'three'
-import { useCustomization } from '../context/Customization'
+import { useGLTF, useTexture } from '@react-three/drei';
+import React from 'react';
+import * as THREE from 'three';
+import { useCustomization } from '../../../context/index.';
 
 const Chair = (props: any) => {
-  const { nodes, materials } = useGLTF('./models/chair.gltf')
-  const { material, legs, chairColor, cushionColor } = useCustomization()
+  const { nodes, materials } = useGLTF('./models/chair.gltf');
+  const { material, legs, chairColor, cushionColor } = useCustomization();
 
   const leatherTextureProps = useTexture({
     normalMap: '/textures/leather/Leather_008_Normal.jpg',
     roughnessMap: '/textures/leather/Leather_008_Roughness.jpg',
-    aoMap: '/textures/leather/Leather_008_Ambient Occlusion.jpg'
-  })
+    aoMap: '/textures/leather/Leather_008_Ambient Occlusion.jpg',
+  });
 
   const fabricTextureProps = useTexture({
     normalMap: '/textures/fabric/Fabric_Knitted_006_normal.jpg',
     roughnessMap: '/textures/fabric/Fabric_Knitted_006_roughness.jpg',
-    aoMap: '/textures/fabric/Fabric_Knitted_006_ambientOcclusion.jpg'
-  })
+    aoMap: '/textures/fabric/Fabric_Knitted_006_ambientOcclusion.jpg',
+  });
 
-  leatherTextureProps.normalMap.repeat.set(3, 3)
-  leatherTextureProps.roughnessMap.repeat.set(3, 3)
-  leatherTextureProps.aoMap.repeat.set(3, 3)
+  leatherTextureProps.normalMap.repeat.set(3, 3);
+  leatherTextureProps.roughnessMap.repeat.set(3, 3);
+  leatherTextureProps.aoMap.repeat.set(3, 3);
   leatherTextureProps.normalMap.wrapS = leatherTextureProps.normalMap.wrapT =
-    THREE.MirroredRepeatWrapping
+    THREE.MirroredRepeatWrapping;
   leatherTextureProps.roughnessMap.wrapS =
-    leatherTextureProps.roughnessMap.wrapT = THREE.MirroredRepeatWrapping
+    leatherTextureProps.roughnessMap.wrapT = THREE.MirroredRepeatWrapping;
   leatherTextureProps.aoMap.wrapS = leatherTextureProps.aoMap.wrapT =
-    THREE.RepeatWrapping
+    THREE.RepeatWrapping;
 
-  fabricTextureProps.normalMap.repeat.set(3, 3)
-  fabricTextureProps.roughnessMap.repeat.set(3, 3)
-  fabricTextureProps.aoMap.repeat.set(3, 3)
+  fabricTextureProps.normalMap.repeat.set(3, 3);
+  fabricTextureProps.roughnessMap.repeat.set(3, 3);
+  fabricTextureProps.aoMap.repeat.set(3, 3);
   fabricTextureProps.normalMap.wrapS = fabricTextureProps.normalMap.wrapT =
-    THREE.RepeatWrapping
+    THREE.RepeatWrapping;
   fabricTextureProps.roughnessMap.wrapS =
-    fabricTextureProps.roughnessMap.wrapT = THREE.RepeatWrapping
+    fabricTextureProps.roughnessMap.wrapT = THREE.RepeatWrapping;
   fabricTextureProps.aoMap.wrapS = fabricTextureProps.aoMap.wrapT =
-    THREE.RepeatWrapping
+    THREE.RepeatWrapping;
 
   return (
     <group {...props} dispose={null}>
@@ -75,9 +75,9 @@ const Chair = (props: any) => {
         visible={legs === 2}
       />
     </group>
-  )
-}
+  );
+};
 
-export default Chair
+export default Chair;
 
-useGLTF.preload('./models/chair.gltf')
+useGLTF.preload('./models/chair.gltf');
