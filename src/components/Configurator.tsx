@@ -1,9 +1,11 @@
-import { useCustomization } from "../context/Customization";
+import React from 'react';
+import { useCustomization } from '../context/Customization';
+import { IColorItem } from '../lib/interfaces';
 
 const Configurator = () => {
   const {
     material,
-    toggleMaterial,
+    setMaterial,
     legs,
     setLegs,
     chairColors,
@@ -15,79 +17,132 @@ const Configurator = () => {
   } = useCustomization();
 
   return (
-    <div className="fixed right-6 top-10 w-80 p-6 flex flex-col gap-4">
-      <div>
-        <h4 className="title">Chair material</h4>
-        <div className="values">
-          <div
-            className='item'
-            onClick={() => toggleMaterial("leather")}
-          >
-            <p className={`label ${material === "leather" ? "text-white border-b-2 border-white" : ""}`}>Leather</p>
-          </div>
-          <div
-            className='item'
-            onClick={() => toggleMaterial("fabric")}
-          >
-            <p className={`label ${material === "fabric" ? "text-white border-b-2 border-white" : ""}`}>Fabric</p>
-          </div>
-        </div>
-      </div>
-      <div>
-        <h4 className="title">Chair color</h4>
-        <div className="values">
-          {chairColors?.map((item: any, index: number) => (
-            <div
-              key={index}
-              className='item'
+    <div className='absolute right-6 top-6 w-80 '>
+      <div className='flex flex-col gap-4 bg-white rounded-xl p-6 overflow-y-auto h-[92vh]'>
+        <PickerSection title='Chair Material'>
+          <TextPicker
+            onClick={() => setMaterial('leather')}
+            selected={material === 'leather'}
+            label='Leather'
+          />
+          <TextPicker
+            onClick={() => setMaterial('fabric')}
+            selected={material === 'fabric'}
+            label='Fabric'
+          />
+        </PickerSection>
+
+        <PickerSection title='Chair Color'>
+          {chairColors?.map(item => (
+            <ColorPicker
+              key={item.color}
               onClick={() => setChairColor(item)}
-            >
-              <p className={`label ${
-                item.color === chairColor?.color ? "text-white border-b-2 border-white" : ""
-              }`}>{item.name}</p>
-            </div>
+              item={item}
+              matcher={chairColor}
+            />
           ))}
-        </div>
-      </div>
-      <div>
-        <h4 className="title">Cushion color</h4>
-        <div className="values">
-          {cushionColors?.map((item: any, index: number) => (
-            <div
-              key={index}
-              className='item'
+        </PickerSection>
+        <PickerSection title='Cushion Color'>
+          {cushionColors?.map(item => (
+            <ColorPicker
+              key={item.color}
               onClick={() => setCushionColor(item)}
-            >
-              <div
-                className={`dot ${
-                  item.color === cushionColor?.color ? "border-2 border-white" : ""
-                }`}
-                style={{ backgroundColor: item.color }}
-              />
-              <p className="label">{item.name}</p>
-            </div>
+              item={item}
+              matcher={cushionColor}
+            />
           ))}
-        </div>
-      </div>
-      <div>
-        <h4 className="title">Legs</h4>
-        <div className="values">
-          <div
-            className={`item ${legs === 1 ? "text-white border-b-2 border-white" : ""}`}
+        </PickerSection>
+        <PickerSection title='Legs'>
+          <TextPicker
             onClick={() => setLegs(1)}
-          >
-            <p className="label">Design</p>
-          </div>
-          <div
-            className={`item ${legs === 2 ? "text-white border-b-2 border-white" : ""}`}
+            selected={legs === 1}
+            label='Design'
+          />
+          <TextPicker
             onClick={() => setLegs(2)}
-          >
-            <p className="label">Classic</p>
-          </div>
-        </div>
+            selected={legs === 2}
+            label='Classic'
+          />
+        </PickerSection>
       </div>
     </div>
   );
 };
 
 export default Configurator;
+
+interface ISectionProps {
+  children: React.ReactNode;
+  title: string;
+}
+
+const PickerSection = ({ title, children }: ISectionProps) => {
+  return (
+    <div>
+      <h4 className='title mb-2'>{title}</h4>
+      <div className='values-container'>{children}</div>
+    </div>
+  );
+};
+
+type IClick = (event: React.MouseEvent<HTMLDivElement>) => void;
+
+interface ITextPicker {
+  onClick: IClick;
+  selected: boolean;
+  label: string;
+}
+
+interface IPickerProps extends IGenericProps {
+  onClick: IClick;
+}
+
+const ColorPicker = ({ onClick, item, matcher }: IPickerProps) => {
+  return (
+    <div className='picker' onClick={onClick}>
+      <Dot item={item} matcher={matcher} />
+      <Label item={item} matcher={matcher} />
+    </div>
+  );
+};
+
+const TextPicker = ({ onClick, selected, label }: ITextPicker) => {
+  return (
+    <div
+      className={`picker ${selected ? 'border-b-2 border-black' : ''}`}
+      onClick={onClick}
+    >
+      <p className={`label ${selected ? 'text-black' : ''}`}>{label}</p>
+    </div>
+  );
+};
+
+interface IGenericProps {
+  item: IColorItem;
+  matcher: IColorItem;
+}
+
+const Dot = ({ item, matcher }: IGenericProps) => {
+  return (
+    <div
+      className={`dot ${
+        item.color === matcher?.color ? 'border-2 border-black' : ''
+      }`}
+      style={{ backgroundColor: item.color }}
+    />
+  );
+};
+
+const Label = ({ item, matcher }: IGenericProps) => {
+  return (
+    <p
+      className={`label ${
+        item.color === matcher?.color
+          ? 'text-black border-b-2 border-black'
+          : ''
+      }`}
+    >
+      {item.name}
+    </p>
+  );
+};
