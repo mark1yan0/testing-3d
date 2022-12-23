@@ -4,7 +4,7 @@ import { IColorItem, TMaterial } from '../lib/interfaces';
 
 interface ICustomization {
   material: TMaterial;
-  toggleMaterial: (material: TMaterial) => void;
+  setMaterial: (material: TMaterial) => void;
   legs: number;
   setLegs: (leg: number) => void;
   chairColors: IColorItem[];
@@ -17,7 +17,7 @@ interface ICustomization {
 
 const initialValues: ICustomization = {
   material: 'leather',
-  toggleMaterial: (material: TMaterial) => {},
+  setMaterial: (material: TMaterial) => {},
   legs: 1,
   setLegs: (leg: number) => {},
   chairColors,
@@ -36,15 +36,11 @@ export const CustomizationProvider = (props: any) => {
   const [chairColor, setChairColor] = useState(initialValues.chairColor);
   const [cushionColor, setCushionColor] = useState(initialValues.cushionColor);
 
-  function toggleMaterial(material: 'leather' | 'fabric') {
-    setMaterial(material);
-  }
-
   return (
     <CustomizationContext.Provider
       value={{
         material,
-        toggleMaterial,
+        setMaterial,
         legs,
         setLegs,
         chairColors,
