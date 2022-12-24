@@ -3,8 +3,9 @@ import { useCustomization } from '../../context/index.';
 import ColorPicker from './ColorPicker';
 import PickerSection from './PickerSection';
 import TextPicker from './TextPicker';
+import SidebarToggle from './Toggle';
 
-const Configurator = () => {
+const Configurator = ({ close }: { close: Function }) => {
   const {
     material,
     setMaterial,
@@ -19,8 +20,9 @@ const Configurator = () => {
   } = useCustomization();
 
   return (
-    <div className='absolute right-6 top-6 w-80 '>
+    <div className='absolute right-2 top-6 sm:w-80 md:right-6 w-[95vw] '>
       <div className='flex flex-col gap-4 bg-white rounded-xl p-6 overflow-y-auto h-[92vh]'>
+        <SidebarToggle toggle={() => close(!open)} />
         <PickerSection title='Chair Material'>
           <TextPicker
             onClick={() => setMaterial('leather')}
